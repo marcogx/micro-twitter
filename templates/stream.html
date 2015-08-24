@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  {% if current_user.is_authenticated() %}
+    {% for post in stream %}
+        <article>
+            <h2>
+                <a href="{{ url_for('streaming', username=post.user.username) }}">{{ post.user.username }}</a>
+            </h2>
+
+            <i class="clock"></i>
+            <time data-time="{{ post.timestamp }}"
+                  datetime="{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}">
+                  {{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+            </time>
+            <a href="{{ url_for('view_post', post_id=post.id) }}" class="view">&nbsp;&nbsp;&nbsp;&nbsp;View</a>
+
+            <div class="post">
+                {{ post.content }}
+            </div>
+        </article>
+    {% endfor %}
+  {% else %}
+      {% for post in stream %}
+          <article>
+                <h2>
+                {{ post.user.username }}
+                </h2>
+
+                <i class="clock"></i>
+                <time data-time="{{ post.timestamp }}"
+                      datetime="{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}">
+                      {{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+                </time>
+                <a href="{{ url_for('view_post', post_id=post.id) }}" class="view">&nbsp;&nbsp;&nbsp;&nbsp;View</a>
+
+                <div class="post" >
+                    {{ post.content }}
+                </div>
+          </article>
+      {% endfor %}
+
+      <article>
+
+        <h2>
+          <p>A Micro Twitter built with Python Flask<br>by <a href="https://www.linkedin.com/in/guangxiong">GuangXIONG@NYU.EDU</a></p>
+
+          <p>Have a try using log in: &nbsp;t@t.com &nbsp;and&nbsp; 123456</p>
+
+          <p>Or</p>
+
+          <p>Hey you might wanna <a href="{{ url_for('register') }}">Register</a> or
+          <a href="{{ url_for('login') }}">Log in</a>
+          as a user to access full functionality ! </p>
+
+        </h2>
+      </article>
+  {% endif %}
+{% endblock %}
