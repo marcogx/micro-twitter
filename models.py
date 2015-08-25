@@ -1,14 +1,16 @@
 import datetime
-
+import os
 from flask.ext.bcrypt import generate_password_hash
 from flask.ext.login import UserMixin
 from peewee import *
 
-# DATABASE = SqliteDatabase('social.db'):3306
-DATABASE = MySQLDatabase("microtwitter", host="microtwitter.cvxlucsoypjt.us-west-2.rds.amazonaws.com",
-                         port=3306, user="microtwitter", passwd="microtwitter")
+# DATABASE = SqliteDatabase('social.db')
+# DATABASE = MySQLDatabase("microtwitter", host="microtwitter.cvxlucsoypjt.us-west-2.rds.amazonaws.com",
+#                          port=3306, user="microtwitter", passwd="microtwitter")
 
-
+DATABASE = Proxy()
+DEBUG = True
+           
 class User(UserMixin, Model):
     username = CharField(unique=True)
     email = CharField(unique=True)
@@ -81,10 +83,23 @@ class Relationship(Model):
     
     class Meta:
         database = DATABASE
-        # indexes = (
-        #     (('from_user', 'to_user'), True)
-        # )
-            
+        indexes = (
+            (('from_user', 'to_user'), True),
+        )
+    
+
+if 'HEROKU' in os.environ:
+    import urlparse, psycopg2
+    urlparse.uses_netloc.append('postgres')
+    url = urlparse.urlparse(os.environ["DATABASE_URL"])
+    db = PostgresqlDatabase(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
+    DATABASE.initialize(db)
+    DEBUG = False
+else:
+    db = SqliteDatabase('micro-twitter.db')
+    DATABASE.initialize(db)
+
+
 
 def initialize():
     DATABASE.connect()

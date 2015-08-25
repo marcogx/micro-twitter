@@ -6,7 +6,6 @@ from flask.ext.login import (LoginManager, login_user, logout_user,
 import forms
 import models
 
-DEBUG = True
 PORT = 8003
 HOST = '0.0.0.0'
 
@@ -105,7 +104,6 @@ def streaming(username=None):
 	template = 'stream.html'
 	user = current_user
 	stream = []
-	# if type(user) == AnonymousUserMixin:
 	if user.is_authenticated():
 		stream = current_user.get_stream().limit(100)
 
@@ -180,11 +178,11 @@ if __name__ == '__main__':
 	models.initialize()
 	try:
 		models.User.create_user(
-			username='test_client',
+			username='TestClient',
 			email='t@t.com',
 			password='123456',
 			admin=False
 		)
 	except ValueError:
 		pass
-	application.run(debug=DEBUG, host=HOST, port=PORT)
+	application.run(debug=models.DEBUG, host=HOST, port=PORT)
