@@ -10,7 +10,8 @@ from peewee import *
 
 DATABASE = Proxy()
 DEBUG = True
-           
+
+
 class User(UserMixin, Model):
     username = CharField(unique=True)
     email = CharField(unique=True)
@@ -89,16 +90,15 @@ class Relationship(Model):
     
 
 if 'HEROKU' in os.environ:
-    import urlparse, psycopg2
-    urlparse.uses_netloc.append('postgres')
-    url = urlparse.urlparse(os.environ["DATABASE_URL"])
-    db = PostgresqlDatabase(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
-    DATABASE.initialize(db)
-    DEBUG = True
-else:
+#     import urlparse, psycopg2
+#     urlparse.uses_netloc.append('postgres')
+#     url = urlparse.urlparse(os.environ["DATABASE_URL"])
+#     db = PostgresqlDatabase(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
+#     DATABASE.initialize(db)
+#     DEBUG = True
+# else:
     db = SqliteDatabase('micro-twitter.db')
     DATABASE.initialize(db)
-
 
 
 def initialize():
