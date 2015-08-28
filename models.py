@@ -102,6 +102,7 @@ else:
 
 
 def initialize():
+    DATABASE.initialize(db)
     DATABASE.connect()
     DATABASE.create_tables([User, Post, Relationship], safe=True)
     DATABASE.close()

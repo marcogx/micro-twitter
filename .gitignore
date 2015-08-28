@@ -7,3 +7,5 @@ venv
 *.pyc
 requirements_backup.txt
 *.db
+.DS_Store
+.idea/
